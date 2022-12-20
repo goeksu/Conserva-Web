@@ -1,0 +1,195 @@
+ * {box-sizing: border-box;}
+      #map {
+        height: 94%; 
+        width: 75%; 
+        float: left;
+
+       }
+       #drawer{
+         width: 25%;
+         height: 69%;
+        float: right; 
+        background-color: #fafafa;
+
+       
+       }
+      #drawer-top{
+      width: 100%;
+         height: 25%;
+         background-color: #363636;
+       
+
+       }
+
+       #action{
+       	height: 6%;
+       	background-color: #d50000;
+       	margin-top: 0;
+       
+       }
+
+       #headert{
+         color: #ffffff;
+      margin: 10px 40px;
+     top: 50%;
+    font-size: 20px;
+    
+       
+       }
+      #koordinasyon{
+ font-size: 30px;
+  color: #eeeeee;
+float: left;
+ margin-top: 40px;
+margin-left: 10px;
+  
+  
+       }
+
+       #sira{
+        background-color: #363636;
+        border-radius: 100px;
+        color: #eeeeee;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        float: left;
+        margin-left: 10px;
+       }
+
+#kisibilgisi{
+  position: absolute;
+  width: 50%;
+  height: 20%;
+  opacity: 0;
+  background-color: #eeeeee;
+  border-radius: 10px;
+  top: 75%;
+  left: 12.5%;
+  transition: 0.3s;
+}
+
+       ul{
+
+      position: absolute; 
+  list-style: none 
+  outside none; margin:0; 
+  padding: 0;
+   width: 25%;
+overflow: scroll;
+    top:30%;
+    height: 69%;
+
+-webkit-overflow-scrolling: touch;
+
+
+       }
+
+       li{
+        width: 100%;
+margin-top: 2px;
+background-color: #eeeeee;
+ padding-top: 15px;
+padding-bottom: 10px;
+transition: 0.3s;
+
+-webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+       }
+
+
+
+
+p{
+  font-size: 12px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+       html, body {
+        word-wrap: break-word;
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        position: fixed;
+        font-family: 'Roboto', serif;}
+
+        #kisifotoinfowindow{
+
+ border-radius: 100px;
+  margin: 5px 5px;
+  float: left;
+  border: 2px solid gray;
+  
+
+}
+
+        #kisibilgisi{
+  position: absolute;
+  width: 50%;
+  height: 150px;
+  opacity: 0;
+  background-color: #eeeeee;
+  border-radius: 10px;
+  top: 75%;
+  left: 12.5%;
+  transition: 0.3s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+#kisifoto{
+
+ border-radius: 100px;
+  margin-left: 10px;
+  margin-top: 25px;
+  float: left;
+  border: 2px solid gray;
+  
+
+}
+#cizgi{
+  height: 120px;
+ margin-top: 15px;
+  border-left: 0.5px solid gray;
+  float: left;
+  opacity: 0.5;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+#bilgiler{
+  padding: 10px 10px;
+  overflow: scroll;
+height: 150px;
+}
+
+#solBilgi{
+  float: left;
+  width: 50%;
+  height: 100%;
+}
+
+#sagBilgi{
+  left: right;
+  height: 100%;
+}
+
+
+#bilgiid{
+  float:right;
+  margin-right:10px;
+}
+
+#guncel{
+  float: right;
+}
+
+
+
+h2{
+  float: left;
+}
+
+       
