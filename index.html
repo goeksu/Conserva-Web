@@ -1,0 +1,788 @@
+
+<!–– Developed by @ahmstg with <3
+and @ efl'19 
+ ––>
+
+<!DOCTYPE html>
+<html>
+<title>Conserva</title>
+  <head>
+
+  	 <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+
+
+    <style>
+     * {box-sizing: border-box;}
+      #map {
+        height: 94%; 
+        width: 75%; 
+        float: left;
+
+       }
+       #drawer{
+         width: 25%;
+         height: 69%;
+        float: right; 
+        background-color: #fafafa;
+
+       
+       }
+      #drawer-top{
+      width: 100%;
+         height: 25%;
+         background-color: #363636;
+       
+
+       }
+
+       #action{
+       	height: 6%;
+       	background-color: #d50000;
+       	margin-top: 0;
+       
+       }
+
+       #headert{
+         color: #ffffff;
+      margin: 10px 40px;
+     top: 50%;
+    font-size: 20px;
+    
+       
+       }
+      #koordinasyon{
+ font-size: 30px;
+  color: #eeeeee;
+float: left;
+ margin-top: 40px;
+margin-left: 10px;
+  
+  
+       }
+
+       #sira{
+        background-color: #363636;
+        border-radius: 100px;
+        color: #eeeeee;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        float: left;
+        margin-left: 10px;
+       }
+
+#kisibilgisi{
+  position: absolute;
+  width: 50%;
+  height: 20%;
+  opacity: 0;
+  background-color: #eeeeee;
+  border-radius: 10px;
+  top: 75%;
+  left: 12.5%;
+  transition: 0.3s;
+}
+
+       ul{
+
+      position: absolute; 
+  list-style: none 
+  outside none; margin:0; 
+  padding: 0;
+   width: 25%;
+overflow: scroll;
+    top:30%;
+    height: 69%;
+
+-webkit-overflow-scrolling: touch;
+
+
+       }
+
+       li{
+        width: 100%;
+margin-top: 2px;
+background-color: #eeeeee;
+ padding-top: 15px;
+padding-bottom: 10px;
+transition: 0.3s;
+
+-webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+       }
+
+
+
+
+p{
+  font-size: 12px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+       html, body {
+        word-wrap: break-word;
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        position: fixed;
+        font-family: 'Roboto', serif;}
+
+        #kisifotoinfowindow{
+
+ border-radius: 100px;
+  margin: 5px 5px;
+  float: left;
+  border: 2px solid gray;
+  
+
+}
+
+        #kisibilgisi{
+  position: absolute;
+  width: 50%;
+  height: 150px;
+  opacity: 0;
+  background-color: #eeeeee;
+  border-radius: 10px;
+  top: 75%;
+  left: 12.5%;
+  transition: 0.3s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+#kisifoto{
+
+ border-radius: 100px;
+  margin-left: 10px;
+  margin-top: 25px;
+  float: left;
+  border: 2px solid gray;
+  
+
+}
+#cizgi{
+  height: 120px;
+ margin-top: 15px;
+  border-left: 0.5px solid gray;
+  float: left;
+  opacity: 0.5;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+#bilgiler{
+  padding: 10px 10px;
+  overflow: scroll;
+height: 150px;
+}
+
+#solBilgi{
+  float: left;
+  width: 50%;
+  height: 100%;
+}
+
+#sagBilgi{
+  left: right;
+  height: 100%;
+}
+
+
+#bilgiid{
+  float:right;
+  margin-right:10px;
+}
+
+#guncel{
+  float: right;
+}
+
+
+
+h2{
+  float: left;
+}
+
+       
+    </style>
+
+
+  </head>
+  <body>
+
+<div id="action">
+  <text id="headert">Conserva</text>
+	</div>
+
+    <div id="map"><button></button></div>
+    <div id="drawer-top">
+       <text id="koordinasyon">
+         Yardım Merkezi
+       </text> 
+      
+       
+      </div>
+    <div id="drawer">
+       <ul id="liste">
+      
+
+      </ul> </div>
+   
+   <div id="kisibilgisi">
+   
+   </div>
+    <script>
+
+      //bilgi ekranları düzenlemesi
+
+ var config = {
+    apiKey: "AIzaSyAocMbZ-XS60PhwapNdAl2ahjylwxwzQpQ",
+    authDomain: "nine11-b1268.firebaseapp.com",
+    databaseURL: "https://nine11-b1268.firebaseio.com",
+    projectId: "nine11-b1268",
+    storageBucket: "nine11-b1268.appspot.com",
+    messagingSenderId: "460490305616"
+  };
+  firebase.initializeApp(config);
+ var db = firebase.firestore();
+
+ var icons = {
+          Polis: {
+            icon: 'src/markpolice.png'
+          },
+          İtfaiye: {
+            icon:  'src/markfire.png'
+          },
+          Ambulans: {
+            icon:   'src/markmedic.png'
+          }
+        };
+
+ var loc = {lat: 39.746734, lng: 39.490813};
+ 
+var markers = [];
+
+var popupclicked = false;
+var selected;
+
+ 
+function initMap() {
+ var geocoder = new google.maps.Geocoder;
+         var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 12, center: loc, disableDefaultUI: true,zoomControl: true, styles: 
+        [
+              {
+                "elementType": "geometry",
+                "stylers": [
+                  {
+                    "color": "#1d2c4d"
+                  }
+                ]
+              },
+              {
+                "elementType": "labels.text.fill",
+                "stylers": [
+                  {
+                    "color": "#8ec3b9"
+                  }
+                ]
+              },
+              {
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                  {
+                    "color": "#1a3646"
+                  }
+                ]
+              },
+              {
+                "featureType": "administrative.country",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                  {
+                    "color": "#4b6878"
+                  }
+                ]
+              },
+              {
+                "featureType": "administrative.land_parcel",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                  {
+                    "color": "#64779e"
+                  }
+                ]
+              },
+              {
+                "featureType": "administrative.province",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                  {
+                    "color": "#4b6878"
+                  }
+                ]
+              },
+              {
+                "featureType": "landscape.man_made",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                  {
+                    "color": "#334e87"
+                  }
+                ]
+              },
+              {
+                "featureType": "landscape.natural",
+                "elementType": "geometry",
+                "stylers": [
+                  {
+                    "color": "#023e58"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi",
+                "elementType": "geometry",
+                "stylers": [
+                  {
+                    "color": "#283d6a"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                  {
+                    "color": "#6f9ba5"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                  {
+                    "color": "#1d2c4d"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi.medical",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "color": "#d50000"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi.park",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "color": "#023e58"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi.park",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                  {
+                    "color": "#3C7680"
+                  }
+                ]
+              },
+              {
+                "featureType": "road",
+                "elementType": "geometry",
+                "stylers": [
+                  {
+                    "color": "#304a7d"
+                  }
+                ]
+              },
+              {
+                "featureType": "road",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                  {
+                    "color": "#98a5be"
+                  }
+                ]
+              },
+              {
+                "featureType": "road",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                  {
+                    "color": "#1d2c4d"
+                  }
+                ]
+              },
+              {
+                "featureType": "road.highway",
+                "elementType": "geometry",
+                "stylers": [
+                  {
+                    "color": "#2c6675"
+                  }
+                ]
+              },
+              {
+                "featureType": "road.highway",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                  {
+                    "color": "#255763"
+                  }
+                ]
+              },
+              {
+                "featureType": "road.highway",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                  {
+                    "color": "#b0d5ce"
+                  }
+                ]
+              },
+              {
+                "featureType": "road.highway",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                  {
+                    "color": "#023e58"
+                  }
+                ]
+              },
+              {
+                "featureType": "transit",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                  {
+                    "color": "#98a5be"
+                  }
+                ]
+              },
+              {
+                "featureType": "transit",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                  {
+                    "color": "#1d2c4d"
+                  }
+                ]
+              },
+              {
+                "featureType": "transit.line",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "color": "#283d6a"
+                  }
+                ]
+              },
+              {
+                "featureType": "transit.station",
+                "elementType": "geometry",
+                "stylers": [
+                  {
+                    "color": "#3a4762"
+                  }
+                ]
+              },
+              {
+                "featureType": "water",
+                "elementType": "geometry",
+                "stylers": [
+                  {
+                    "color": "#0e1626"
+                  }
+                ]
+                },
+                {
+                  "featureType": "water",
+                  "elementType": "labels.text.fill",
+                  "stylers": [
+                    {
+                      "color": "#4e6d70"
+                    }
+                  ]
+                }]
+
+     
+  });
+
+ 
+
+
+  
+ db.collection("calls").orderBy("update", "asc").onSnapshot(function(querySnapshot) {
+  
+        markerKaldir();
+        $('ul').empty();
+       
+        querySnapshot.forEach(function(doc) {
+           
+            ekle(doc.data().id, doc.data().tip,  doc.data().konum, doc.data().ek, map, doc.data().update.toDate().toString().split(' ')[4],geocoder, doc.data().sahip, doc.data().adres);
+           });
+
+if(!$("#liste #"+selected).length)
+{
+ popupkapat();
+ popupclicked = false;
+ selected = "no";
+}else{
+$('#' +selected).css("background-color","#bdbdbd");
+}
+        
+    });
+
+}
+
+
+
+   function ekle(id, destek, konum, ek, map, saat,geocoder, sahip, adres) {
+
+  var numara = $('#liste li').length + 1;
+
+   var isim, boy, kilo, kan, bagisci, cinsiyet, alerjen, ozeldurum, yas, foto;
+    
+   
+   var lat = konum.latitude.toString().substring(0, 10);
+   var lon = konum.longitude.toString().substring(0, 10);
+
+
+if(destek==1){
+  destek = "Ambulans"
+}
+if(destek==2){
+  destek = "Polis"
+}
+if(destek==3){
+  destek = "İtfaiye"
+}
+
+
+if(id.toString().substring(0, 8)!="dedektor"){
+  $('#liste').append('<li id="'+id+'"><h2><div id="sira">'+ numara+'</div>&nbsp;'+
+    destek+'</h2><b> <p id="guncel">Son güncelleme: </b>'+saat+'</p><br><br><br><p id="detaylar"><b>ID: </b>'+id+'<br><b>Adres: </b><span></span><br> <b>Enlem:</b>'+lat+' <b>Boylam:</b>'+lon+'</p></li>');
+adresekle(geocoder, lat, lon,id, '#'+id+' span');
+}else{
+ $('#liste').append('<li id="'+id+'"><h2><div id="sira">'+ numara+'</div>&nbsp;'+
+    destek+'</h2><b> <p id="guncel">Son güncelleme: </b>'+saat+'<br>Otomatik Çağrı</p><br><br><br><p id="detaylar"><b>ID: </b>'+id+'<br><b>Adres: </b><span>'+adres+'</span><br> <b>Enlem:</b>'+lat+' <b>Boylam:</b>'+lon+'</p></li>');
+
+}
+
+ db.collection('users').where('id', '==', id).get().then(function(querySnapshot) {
+  if (querySnapshot.size > 0) {
+  
+      isim = querySnapshot.docs[0].data().isim;
+      boy = querySnapshot.docs[0].data().boy;
+      kilo = querySnapshot.docs[0].data().kilo;
+      kan = querySnapshot.docs[0].data().kan;
+      bagisci = querySnapshot.docs[0].data().bagisci;
+      cinsiyet = querySnapshot.docs[0].data().cinsiyet;
+      alerjen = querySnapshot.docs[0].data().alerjen;
+      ozeldurum = querySnapshot.docs[0].data().ozeldurum;
+      yas = querySnapshot.docs[0].data().yas;
+
+      foto = querySnapshot.docs[0].data().foto;
+      
+
+markerEkle(lat, lon, map, id, destek, numara, isim, kan, cinsiyet, yas, foto, saat, adres);
+  } else {
+    console.log("belge yok");
+  }
+})
+.catch(function(error) {
+  console.log("hata mesajı: ", error);
+});
+
+
+$('#'+ id).click(function() {
+ 
+    if(id!=selected){
+      popupclicked = true;
+     $('#' +selected).css("background-color","#eeeeee");
+     $('#' +id).css("background-color","#bdbdbd");
+    selected = id;
+    map.panTo(new google.maps.LatLng(lat,lon));
+     popupac(id, destek, numara,isim, kan ,cinsiyet, yas, foto, alerjen,boy, kilo,ek, saat,adres,sahip);
+
+}else{
+    
+       popupkapat();
+      
+       $('#' +id).css("background-color","#eeeeee");
+       selected ="no";
+       popupclicked = false;
+   }
+ });
+
+$('#'+id).mouseenter(function() {
+ if(!popupclicked){
+   $('#' +id).css("background-color","#e0e0e0");
+  popupac(id, destek, numara,isim, kan ,cinsiyet, yas, foto, alerjen,boy, kilo,ek, saat,adres,sahip);
+ }
+   
+ 
+}).mouseleave(function() {
+if(!popupclicked){
+  $('#' +id).css("background-color","#eeeeee");
+   $('#kisibilgisi').css("opacity","0");
+ }
+})
+
+}
+
+
+     
+
+ function adresekle(geocoder, lat, lon,id ,icine) {
+   var adres;
+
+        var latlng = new google.maps.LatLng(parseFloat(lat),parseFloat(lon));
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              adres = results[0].formatted_address;
+              
+              $(icine).append(adres);
+              } else {
+              window.alert('Sonuc bulunamadi');
+              adres = "Adres Alınamadı";
+            }
+          } else {
+            window.alert('hata kodu: ' + status);
+            adres = "Adres Alınamadı";
+          }
+        });
+      }
+
+  
+
+function popupac(id, destek, numara,isim, kan ,cinsiyet, yas, foto, alerjen,boy, kilo,ek, saat, adres, sahip){
+    $('#kisibilgisi').empty();
+  
+ if(id.toString().substring(0, 8)!="dedektor"){
+
+if(destek=="Ambulans"){
+   $('#kisibilgisi').append('<img id="kisifoto" src="'+foto+'" height="100px" width="100px" border-radius="50px"><div id="cizgi"></div><div id="bilgiler"><font size="5"><b>'+
+numara +'&nbsp;Numaralı&nbsp;' + destek + '&nbsp;Çağrısı</b></font></font><br><br> <div id="solBilgi"> <font size="2"><b>ID:&nbsp;</b>' + id +
+'<br><font size="2"><b>İsim:&nbsp;</b>' + isim.charAt(0).toUpperCase() + isim.slice(1) +
+'<br><b>Cinsiyet:&nbsp;</b>' + cinsiyet.charAt(0).toUpperCase() + cinsiyet.slice(1) + '<br><b>Kan Grubu:&nbsp;</b>' + kan + '<br></font></div><div id="sagBilgi"><font size="2"><b>Boy:&nbsp;</b>' + boy +
+'<br><b>Kilo:&nbsp;</b>' + kilo + '<br><b>Alerjen:&nbsp;</b>' + alerjen.charAt(0).toUpperCase() + alerjen.slice(1) + '</font><font size="2"><b><br>Ek bilgi:&nbsp;</b>' + ek.charAt(0).toUpperCase() + ek.slice(1) + '</font></div></div> </div>');
+}else{
+   $('#kisibilgisi').append('<img id="kisifoto" src="'+foto+'" height="100px" width="100px" border-radius="50px"><div id="cizgi"></div><div id="bilgiler"><font size="5"><b>'+
+numara +'&nbsp;Numaralı&nbsp;' + destek + '&nbsp;Çağrısı</b></font><br><br> <div id="solBilgi"> <font size="2"><b>ID:&nbsp;</b>' + id +
+'<br><font size="2"><b>İsim:&nbsp;</b>' + isim.charAt(0).toUpperCase() + isim.slice(1) +
+'<br><b>Cinsiyet:&nbsp;</b>' + cinsiyet.charAt(0).toUpperCase() + cinsiyet.slice(1) + '<br><b>Kan Grubu:&nbsp;</b>' + kan + '<br></font></div><div id="sagBilgi"><font size="2"><b>Ek bilgi:&nbsp;</b>' + ek.charAt(0).toUpperCase() + ek.slice(1) + '</font></div></div></div>');
+}
+
+}else{
+
+
+   $('#kisibilgisi').append('<img id="kisifoto" src="'+foto+'" height="100px" width="100px" border-radius="50px"><div id="cizgi"></div><div id="bilgiler"><font size="5"><b>'+
+numara +'&nbsp;Numaralı&nbsp;' + destek + '&nbsp;Çağrısı</b></font> - Otomatik Çağrı<br><br> <div id="solBilgi"> <font size="2"><b>ID:&nbsp;</b>' + id +
+'<br></div><div id="sagBilgi"><font size="2"><b>Adres: &nbsp;</b>'+adres+'</font></div></div></div>');
+
+
+}
+
+ 
+
+ $('#kisibilgisi').css("opacity","1");
+}
+function popupkapat(){
+  $('#kisibilgisi').css("opacity","0");
+   $('#kisibilgisi').empty();
+    $('#' +selected).css("background-color","#eeeeee");
+   popupclicked = false;
+}
+
+
+
+function markerEkle(lat,lon, map, id, destek, numara, isim, kan, cinsiyet, yas, foto, saat,adres) {
+
+if(id.toString().substring(0, 8)!="dedektor"){
+
+var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(lat, lon),
+           id: id,
+      icon: icons[destek].icon,
+
+info: new google.maps.InfoWindow({maxWidth: 270,
+        content: "<img id='kisifotoinfowindow' height='50px' width='50px' src='"+foto+"'> "+
+        "<b>"+numara +" numaralı "+destek.toLowerCase() + " çağrısı:<br>isim:</b> "+
+         
+isim + "<br>"
++"<b>cinsiyet:</b> "+ cinsiyet +"<br>"
++"<b>kan grubu:</b> "+ kan
+      
+      }),
+          map: map
+        });
+         google.maps.event.addListener(marker, 'click', function() {
+      marker.info.open(map, marker);
+    });
+ 
+
+
+ 
+}else{
+
+ var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(lat, lon),
+           id: id,
+      icon: icons[destek].icon,
+
+info: new google.maps.InfoWindow({maxWidth: 270,
+        content: "<img id='kisifotoinfowindow' height='50px' width='50px' src='"+foto+"'> "+
+        "<b>"+numara +" numaralı "+destek.toLowerCase() + " çağrısı:</b><br>otomatik çağrı<br>"
+       +"<b>adres:</b> "+ $("#"+id +" span").text() 
+      }),
+          map: map
+        });
+         google.maps.event.addListener(marker, 'click', function() {
+      marker.info.open(map, marker);
+    });
+
+ 
+}
+      if(!popupclicked){
+    map.panTo(marker.getPosition());}
+    markers.push(marker);
+      
+        return marker;
+      }
+
+function markerKaldir() { 
+
+  for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+         markers = [];
+      }
+
+    </script>
+  
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA76-DhBgB8n-Gb3k_VY52NAZ9H5v7jtVA&callback=initMap">
+    </script>
+
+
+
+      
+  </body>
+</html>
